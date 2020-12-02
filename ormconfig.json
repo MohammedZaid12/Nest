@@ -3,11 +3,12 @@
     "host": "127.0.0.1",
     "port": 3306,
     "username": "root",
-    "password": "WizTech123a",
+    "password": "",
     "database": "nest",
-    "entities": ["dist/**/*.entit{.ts,.js}"] 
-   
-    
+    "entities": ["dist/**/*.entit{.ts,.js}"],
+    "migrations": ["dist/migrations/*{.ts,.js}"],
+    "migrationsTableName": "migrations_typeorm",
+    "migrationsRun": true
   }
 
 
