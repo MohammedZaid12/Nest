@@ -6,16 +6,22 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { Connection } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [  
+  imports: [
     TypeOrmModule.forRoot(),
-  UsersModule,
-  AuthModule
-],
+    UsersModule,
+    AuthModule,
+    ConfigModule.forRoot({
+      envFilePath: 'app.development.env',
+      ignoreEnvFile: true,
+      isGlobal: true,
+    })
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {
-  constructor(private connection:Connection){}
+  constructor(private connection: Connection) { }
 }
