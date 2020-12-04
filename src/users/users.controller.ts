@@ -1,10 +1,13 @@
 import { User } from './user.entit';
-import { Controller, Post, Body, Get, Put, Delete, Param, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Delete, Param, HttpStatus, UseGuards, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
+@UseGuards(AuthGuard('jwt'))
+@UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
-
+password:string;
     constructor(private service: UsersService) { }
 
     @Get()
@@ -21,16 +24,7 @@ export class UsersController {
             data: await this.service.getUser(params.id),
         }
     }
-    @Post()
-    async createUser(@Body() data: User) {
-
-        return {
-            status: HttpStatus.OK,
-            message: 'User succesfully added',
-            data: await this.service.addUsers(data),
-        };
-    }
-    @Delete(':id')
+    @Delete(':id/delete')
     async deleteUser(@Param() params) {
         return {
             message: 'User deleted successfully',
