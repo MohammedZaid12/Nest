@@ -47,17 +47,23 @@ export class AuthService {
 
     }
 
+    async register(data: User) {
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+        const user = this.authRepository.create({ ...data, password: hashedPassword });
+        this.authRepository.save(user);
+    }
+
     private token({ email }: Auth) {
         let user: JwtPayload = { email };
         let accessToken = this.jwtService.sign(user);
         return {
-            expiresIn: '1000',
+            expiresIn: '7d',
             accessToken,
         };
     }
 
     async findByPayload({ email }: any): Promise<User> {
-        return await this.authRepository.findOne({  
+        return await this.authRepository.findOne({
             where: { email }
         });
     }

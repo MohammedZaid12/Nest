@@ -1,5 +1,5 @@
 import { User } from './user.entit';
-import { Injectable, Inject, Param, Delete } from '@nestjs/common';
+import { Injectable, Inject, Param, Delete, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
@@ -11,6 +11,7 @@ export class UsersService {
 
     constructor(@InjectRepository(User) private usersRepository: Repository<User>) { }
 
+    @UseInterceptors(ClassSerializerInterceptor)
     getUser(id: number) {
         return this.usersRepository.find({
             where: [{ "id": id }]
@@ -18,7 +19,7 @@ export class UsersService {
     }
 
     getUsers() {
-        return this.usersRepository.find()
+        return this.usersRepository.find();
     }
     async addUsers(data: User) {
         const hashedPassword = await bcrypt.hash(data.password, 10);
