@@ -1,8 +1,9 @@
 import { User } from './user.entit';
-import { Injectable, Inject, Param } from '@nestjs/common';
+import { Injectable, Inject, Param, Delete } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
+import { pipe } from 'rxjs';
 
 
 @Injectable()
@@ -17,19 +18,19 @@ export class UsersService {
     }
 
     getUsers() {
-        return this.usersRepository.find();
+        return this.usersRepository.find()
     }
-    async addUsers(data: User){
+    async addUsers(data: User) {
         const hashedPassword = await bcrypt.hash(data.password, 10);
-        const user = this.usersRepository.create({...data,password:hashedPassword});
+        const user = this.usersRepository.create({ ...data, password: hashedPassword });
         this.usersRepository.save(user);
     }
     removeUser(id: string) {
         this.usersRepository.delete(id);
     }
-    async updateUser(id:number , user:User ){
-     return await this.usersRepository.update(id,user);
-     
+    async updateUser(id: number, user: User) {
+        return await this.usersRepository.update(id, user);
+
     }
 
 
