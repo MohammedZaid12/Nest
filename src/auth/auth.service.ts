@@ -36,9 +36,8 @@ export class AuthService {
         const returnResponse = {
             ...this.token(data),
             Id: data.id,
-            name: data.fullName,
-            email: data.email,
-            RegisteredOn: new Date(data.createdDate).toDateString()
+            name: data.name,
+            email: data.email
         };
         return {
             message: "User logged In",
@@ -48,9 +47,33 @@ export class AuthService {
     }
 
     async register(data: User) {
-        const hashedPassword = await bcrypt.hash(data.password, 10);
-        const user = this.authRepository.create({ ...data, password: hashedPassword });
-        this.authRepository.save(user);
+
+        const check = await this.authRepository.findOne({ where: [{ "email": data.email }] });
+        var count = await this.authRepository.count();
+        count++;
+        if (check) {
+            let errorResponse = new HttpException('User already exists', HttpStatus.UNAUTHORIZED);
+            return {
+                errorMessage: errorResponse.getResponse(),
+                status: errorResponse.getStatus()
+            };
+
+        }
+        else {
+
+            const hashedPassword = await bcrypt.hash(data.password, 10);
+            const user = this.authRepository.create({ ...data, password: hashedPassword});
+            this.authRepository.insert(user);
+            const concat = "PO"+user.id;
+            user.phoneNumber = concat;
+            this.authRepository.update();
+            return {
+                message:'User added Successfully'
+            };
+        }
+
+
+
     }
 
     private token({ email }: Auth) {

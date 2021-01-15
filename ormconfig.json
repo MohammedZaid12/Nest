@@ -8,7 +8,7 @@
     "entities": ["dist/**/*.entit{.ts,.js}"],
     "migrations": ["dist/migrations/*{.ts,.js}"],
     "migrationsTableName": "migrations_typeorm",
-    "migrationsRun": false
+    "migrationsRun": true
   }
 
 

@@ -1,33 +1,26 @@
 import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
-import { IsDate, IsEmail, Length, Matches, Max, Min } from "class-validator";
 import { Exclude, Expose } from "class-transformer";
 
 
 
-@Entity('user')
-export class User {
+@Entity('menu')
+export class Menu {
     @PrimaryGeneratedColumn()
     id: number;
-
     @Column({ length: 25 })
     name:string;
-
     @Column({ type:'text' , unique:true})
-    @IsEmail()
-    email:string;
-
+    code:string;
     @Column()
-    @Exclude()
-    password:string;
+    price:number;
     @Column()
-    phoneNumber:string;
-
+    description:string;
     @Column({ length: 25 })
-    userType:string;
-    
+    parentCode:string;
+    @Column()
+    isParent:number;
     @Column()
     status:number;
-
 
    
 }
