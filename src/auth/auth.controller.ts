@@ -13,8 +13,6 @@ export class AuthController {
     @Post('register')
     async userRegistration(@Body() userRegistration: User) {
         return {
-            status: HttpStatus.OK,
-            message: 'User succesfully added',
             data: await this.authService.register(userRegistration),
         };
 
